@@ -9,6 +9,7 @@ The listener files have to be ran on the computer/ device, and the other file on
 * snake - the popular snake game on the hat display, using orientation to move around (accelerometer).
 * gyrostick & gyrostick_listener - utilizing the Pi's orientation as a mouse, using joystick (slowly moving) mechanics.
 * gyromouse & gyromouse_listener - similar to the gyrostick, except the position on the theoretical zy plane is directly reflected onto the mouse on the screen.
+* clear - clears the 8x8 sense hat display.
 #### Dependencies
 ```
 pip install sense_hat, sockets
