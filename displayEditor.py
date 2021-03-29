@@ -1,11 +1,9 @@
 # By Stashito
 # 18/12/2019
-# Python 3
 
 # This is a raspberry pi sense HAT display editor, where you can draw your own designs, click save,
 # and they will be saved in an array format as needed for projects involving the 8x8 display.
 # The saved files will be saved in a .txt file called savedGrids.txt, where each new save is ordered from old to new.
-# To run, simply go into the directory of this file in your terminal and type "python displayEditor.py"
 
 
 import pygame as pg
@@ -110,10 +108,7 @@ savingTick = 0
 
 def display():
     win.fill((20,20,20))
-    # x, y = pg.mouse.get_pos()
-    # pS, pR = text_objects(str(x) + " " + str(y), smallText, (0,255,0))
-    # pR.center = ((x), (y))
-    # win.blit(pS,pR)
+
     global isSaving
     if isSaving:
         global savingTick
@@ -127,21 +122,8 @@ def display():
     colorsR.center = ((200), (360))
 
     for i in range(8):
-        pg.draw.rect(win, pixels[i].getColorTuple(), ((800+(i*40), 400), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+8].getColorTuple(), ((800+(i*40), 440), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+16].getColorTuple(), ((800+(i*40), 480), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+24].getColorTuple(), ((800+(i*40), 520), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+32].getColorTuple(), ((800+(i*40), 560), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+40].getColorTuple(), ((800+(i*40), 600), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+48].getColorTuple(), ((800+(i*40), 640), (30,30)))
-    for i in range(8):
-        pg.draw.rect(win, pixels[i+56].getColorTuple(), ((800+(i*40), 680), (30,30)))
+        for j in range(8):
+            pg.draw.rect(win, pixels[j+(i*8)].getColorTuple(), ((800+(j*40), 400+40*i), (30,30)))
 
     for box in input_boxes:
         box.update()
@@ -177,32 +159,19 @@ def saveGrid():
     global isSaving
     isSaving = True
     with open("savedGrids.txt", 'a') as f:
-        f.write("\n\n"
-            "pixels = ["
-            +pixels[0].getColor()+", "+pixels[1].getColor()+", "+pixels[2].getColor()+", "+pixels[3].getColor()+", "
-            +pixels[4].getColor()+", "+pixels[5].getColor()+", "+pixels[6].getColor()+", "+pixels[7].getColor()+", \n\t"
-            +pixels[8].getColor()+", "+pixels[9].getColor()+", "+pixels[10].getColor()+", "+pixels[11].getColor()+", "
-            +pixels[12].getColor()+", "+pixels[13].getColor()+", "+pixels[14].getColor()+", "+pixels[15].getColor()+", \n\t"
-            +pixels[16].getColor()+", "+pixels[17].getColor()+", "+pixels[18].getColor()+", "+pixels[19].getColor()+", "
-            +pixels[20].getColor()+", "+pixels[21].getColor()+", "+pixels[22].getColor()+", "+pixels[23].getColor()+", \n\t"
-            +pixels[24].getColor()+", "+pixels[25].getColor()+", "+pixels[26].getColor()+", "+pixels[27].getColor()+", "
-            +pixels[28].getColor()+", "+pixels[29].getColor()+", "+pixels[30].getColor()+", "+pixels[31].getColor()+", \n\t"
-            +pixels[32].getColor()+", "+pixels[33].getColor()+", "+pixels[34].getColor()+", "+pixels[35].getColor()+", "
-            +pixels[36].getColor()+", "+pixels[37].getColor()+", "+pixels[38].getColor()+", "+pixels[39].getColor()+", \n\t"
-            +pixels[40].getColor()+", "+pixels[41].getColor()+", "+pixels[42].getColor()+", "+pixels[43].getColor()+", "
-            +pixels[44].getColor()+", "+pixels[45].getColor()+", "+pixels[46].getColor()+", "+pixels[47].getColor()+", \n\t"
-            +pixels[48].getColor()+", "+pixels[49].getColor()+", "+pixels[50].getColor()+", "+pixels[51].getColor()+", "
-            +pixels[52].getColor()+", "+pixels[53].getColor()+", "+pixels[54].getColor()+", "+pixels[55].getColor()+", \n\t"
-            +pixels[56].getColor()+", "+pixels[57].getColor()+", "+pixels[58].getColor()+", "+pixels[59].getColor()+", "
-            +pixels[60].getColor()+", "+pixels[61].getColor()+", "+pixels[62].getColor()+", "+pixels[63].getColor() + "]")
+        output = "\n\npixels= [\n\t"
 
+        for i in range(8):
+            for j in range(8):
+                output += pixels[j + 8*i].getColor() + ", "
+            output += "\n\t"
+
+        f.write(output+"]")
         f.close()
 
 
 def checkEvents():
-    # print("checkin")
     for event in pg.event.get():
-
         for box in input_boxes:
             box.handle_event(event)
 
@@ -217,149 +186,10 @@ def checkEvents():
                 print("saving...")
                 saveGrid()
 
-            elif y > 400 and y < 430:
-                if x > 800 and x < 840:
-                    pixels[0].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[1].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[2].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[3].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[4].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[5].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[6].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[7].color=currentColor
-
-            elif y > 440 and y < 480:
-                if x > 800 and x < 840:
-                    pixels[8].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[9].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[10].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[11].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[12].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[13].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[14].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[15].color=currentColor
-
-            elif y > 480 and y < 520:
-                if x > 800 and x < 840:
-                    pixels[16].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[17].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[18].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[19].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[20].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[21].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[22].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[23].color=currentColor
-
-            elif y > 520 and y < 560:
-                if x > 800 and x < 840:
-                    pixels[24].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[25].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[26].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[27].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[28].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[29].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[30].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[31].color=currentColor
-
-            elif y > 560 and y < 600:
-                if x > 800 and x < 840:
-                    pixels[32].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[33].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[34].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[35].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[36].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[37].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[38].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[39].color=currentColor
-
-            elif y > 600 and y < 640:
-                if x > 800 and x < 840:
-                    pixels[40].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[41].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[42].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[43].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[44].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[45].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[46].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[47].color=currentColor
-
-            elif y > 640 and y < 680:
-                if x > 800 and x < 840:
-                    pixels[48].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[49].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[50].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[51].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[52].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[53].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[54].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[55].color=currentColor
-
-            elif y > 680 and y < 720:
-                if x > 800 and x < 840:
-                    pixels[56].color=currentColor
-                elif x > 840 and x < 880:
-                    pixels[57].color=currentColor
-                elif x > 880 and x < 920:
-                    pixels[58].color=currentColor
-                elif x > 920 and x < 960:
-                    pixels[59].color=currentColor
-                elif x > 960 and x < 1000:
-                    pixels[60].color=currentColor
-                elif x > 1000 and x < 1040:
-                    pixels[61].color=currentColor
-                elif x > 1040 and x < 1080:
-                    pixels[62].color=currentColor
-                elif x > 1080 and x < 1120:
-                    pixels[63].color=currentColor
+            for i in range(8):
+                for j in range(8):
+                    if y > 400 + 40*i and y < 430 + 40*i and x > 800 + 40*j and x < 830 + 40*j:
+                        pixels[j+8*i].color = currentColor
 
 while True:
     checkEvents()
